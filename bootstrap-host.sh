@@ -4,7 +4,7 @@
 #
 set -ex
 
-DASH_IMAGE=${DASH_IMAGE:-dashpay/dashd}
+PION_IMAGE=${PION_IMAGE:-pioncoin/piond}
 
 distro=$1
 shift
@@ -35,23 +35,23 @@ if [ "$distro" = "trusty" -o "$distro" = "ubuntu:14.04" ]; then
 fi
 
 # Always clean-up, but fail successfully
-docker kill dashd-node 2>/dev/null || true
-docker rm dashd-node 2>/dev/null || true
-stop docker-dashd 2>/dev/null || true
+docker kill piond-node 2>/dev/null || true
+docker rm piond-node 2>/dev/null || true
+stop docker-piond 2>/dev/null || true
 
 # Always pull remote images to avoid caching issues
-if [ -z "${DASH_IMAGE##*/*}" ]; then
-    docker pull $DASH_IMAGE
+if [ -z "${PION_IMAGE##*/*}" ]; then
+    docker pull $PION_IMAGE
 fi
 
 # Initialize the data container
-docker volume create --name=dashd-data
-docker run -v dashd-data:/dash --rm $DASH_IMAGE dash_init
+docker volume create --name=piond-data
+docker run -v piond-data:/pion --rm $PION_IMAGE pion_init
 
-# Start dashd via upstart and docker
-curl https://raw.githubusercontent.com/dashpay/docker-dashd/master/upstart.init > /etc/init/docker-dashd.conf
-start docker-dashd
+# Start piond via upstart and docker
+curl https://raw.githubusercontent.com/pioncoin/docker-piond/master/upstart.init > /etc/init/docker-piond.conf
+start docker-piond
 
 set +ex
-echo "Resulting dash.conf:"
-docker run -v dashd-data:/dash --rm $DASH_IMAGE cat /dash/.dashcore/dash.conf
+echo "Resulting pion.conf:"
+docker run -v piond-data:/pion --rm $PION_IMAGE cat /pion/.pioncore/pion.conf

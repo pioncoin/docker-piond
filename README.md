@@ -1,12 +1,12 @@
-Dashd for Docker
+Piond for Docker
 ================
 
-[![Docker Stats](http://dockeri.co/image/dashpay/dashd)](https://hub.docker.com/r/dashpay/dashd/)
+[![Docker Stats](http://dockeri.co/image/pioncoin/piond)](https://hub.docker.com/r/pioncoin/piond/)
 
-[![Build Status](https://travis-ci.org/dashpay/docker-dashd.svg?branch=master)](https://travis-ci.org/dashpay/docker-dashd/)
+[![Build Status](https://travis-ci.org/pioncoin/docker-piond.svg?branch=master)](https://travis-ci.org/pioncoin/docker-piond/)
 
 
-Docker image that runs the Dash dashd node in a container for easy deployment.
+Docker image that runs the Pion piond node in a container for easy deployment.
 
 
 Requirements
@@ -24,29 +24,29 @@ Really Fast Quick Start
 
 One liner for Ubuntu 14.04 LTS machines with JSON-RPC enabled on localhost and adds upstart init script:
 
-    curl https://raw.githubusercontent.com/dashpay/docker-dashd/master/bootstrap-host.sh | sh -s trusty
+    curl https://raw.githubusercontent.com/pioncoin/docker-piond/master/bootstrap-host.sh | sh -s trusty
 
 
 Quick Start
 -----------
 
-1. Create a `dashd-data` volume to persist the dashd blockchain data, should exit immediately.  The `dashd-data` container will store the blockchain when the node container is recreated (software upgrade, reboot, etc):
+1. Create a `piond-data` volume to persist the piond blockchain data, should exit immediately.  The `piond-data` container will store the blockchain when the node container is recreated (software upgrade, reboot, etc):
 
-        docker volume create --name=dashd-data
-        docker run -v dashd-data:/dash --name=dashd-node -d \
-            -p 9999:9999 \
-            -p 127.0.0.1:9998:9998 \
-            dashpay/dashd
+        docker volume create --name=piond-data
+        docker run -v piond-data:/pion --name=piond-node -d \
+            -p 9953:9953 \
+            -p 127.0.0.1:9954:9954 \
+            pioncoin/piond
 
-2. Verify that the container is running and dashd node is downloading the blockchain
+2. Verify that the container is running and piond node is downloading the blockchain
 
         $ docker ps
         CONTAINER ID        IMAGE                         COMMAND             CREATED             STATUS              PORTS                                              NAMES
-        d0e1076b2dca        dashpay/dashd:latest          "dash_oneshot"      2 seconds ago       Up 1 seconds        127.0.0.1:9998->9998/tcp, 0.0.0.0:9999->9999/tcp   dashd-node
+        d0e1076b2dca        pioncoin/piond:latest          "pion_oneshot"      2 seconds ago       Up 1 seconds        127.0.0.1:9954->9953/tcp, 0.0.0.0:9954->9954/tcp   piond-node
 
 3. You can then access the daemon's output thanks to the [docker logs command]( https://docs.docker.com/reference/commandline/cli/#logs)
 
-        docker logs -f dashd-node
+        docker logs -f piond-node
 
 4. Install optional init scripts for upstart and systemd are in the `init` directory.
 
@@ -56,11 +56,11 @@ Documentation
 
 * To run in testnet, add environment variable `TESTNET=1` to `docker run` as such:
 
-        docker run -v dashd-data:/dash --name=dashd-node -d \
+        docker run -v piond-data:/pion --name=piond-node -d \
             --env TESTNET=1 \
-            -p 9999:9999 \
-            -p 127.0.0.1:9998:9998 \
-            dashpay/dashd
+            -p 19954:19954 \
+            -p 127.0.0.1:19953:19953 \
+            pioncoin/piond
 
 * Additional documentation in the [docs folder](docs).
 
@@ -68,5 +68,5 @@ Credits
 -------
 
 Original work by Kyle Manna [https://github.com/kylemanna/docker-bitcoind](https://github.com/kylemanna/docker-bitcoind).
-Modified to use Dash Core instead of Bitcoin Core.
+Modified to use Pion Core instead of Bitcoin Core.
 
